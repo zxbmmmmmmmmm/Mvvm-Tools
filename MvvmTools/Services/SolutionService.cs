@@ -296,11 +296,12 @@ namespace MvvmTools.Services
             IEnumerable<string> typeNamesInFile,
             string[] viewPrefixes,
             string[] viewSuffixes,
-            string viewModelSuffix)
+            string viewModelSuffix,
+            bool searchAll = false)
         {
             GetTypeCandidates(typeNamesInFile, viewPrefixes, viewSuffixes, viewModelSuffix,
                 out var viewCandidateTypeNames,
-                out var viewModelCandidateTypeNames);
+                out var viewModelCandidateTypeNames,searchAll);
 
             List<ProjectItemAndType> rval;
 
@@ -372,7 +373,7 @@ namespace MvvmTools.Services
             }
         }
 
-        public void GetTypeCandidates(IEnumerable<string> typeNamesInFile, string[] viewPrefixes, string[] viewSuffixes, string viewModelSuffix, out List<string> viewModelsTypeCandidates, out List<string> viewsTypeCandidates)
+        public void GetTypeCandidates(IEnumerable<string> typeNamesInFile, string[] viewPrefixes, string[] viewSuffixes, string viewModelSuffix, out List<string> viewModelsTypeCandidates, out List<string> viewsTypeCandidates,bool searchAll = false)
         {
             viewModelsTypeCandidates = new List<string>();
             viewsTypeCandidates = new List<string>();
@@ -381,10 +382,17 @@ namespace MvvmTools.Services
             foreach (var typeName in typeNamesInFile)
             {
                 // If a view model...
-                if (viewModelSuffix == string.Empty || typeName.EndsWith(viewModelSuffix, StringComparison.OrdinalIgnoreCase))
+                if (viewModelSuffix == string.Empty 
+                    || typeName.EndsWith(viewModelSuffix, StringComparison.OrdinalIgnoreCase)
+                    ||searchAll)
                 {
                     // Remove ViewModel from end and add all the possible suffixes.
-                    var baseName = typeName.Substring(0, typeName.Length - viewModelSuffix.Length);
+                    var baseName = typeName;
+                    if(typeName.EndsWith(viewModelSuffix, StringComparison.OrdinalIgnoreCase))
+                    {
+                        baseName = typeName.Substring(0, typeName.Length - viewModelSuffix.Length);
+                    }
+
                     foreach (var suffix in viewSuffixes)
                     {
                         var candidate = baseName + suffix;
@@ -432,7 +440,6 @@ namespace MvvmTools.Services
                             baseName = baseName.Substring(viewPrefix.Length);
                         if (viewSuffix != string.Empty && baseName.EndsWith(viewSuffix))
                             baseName = baseName.Substring(0, baseName.Length - viewSuffix.Length);
-
                         if (baseName != typeName)
                         {
                             var candidate = baseName + viewModelSuffix;
@@ -445,6 +452,7 @@ namespace MvvmTools.Services
                             if (!viewsTypeCandidates.Contains(candidate))
                                 viewsTypeCandidates.Add(candidate);
                         }
+
                     }
                 }
             }
@@ -643,9 +651,11 @@ namespace MvvmTools.Services
 
             foreach (ProjectItem pi in projectItems)
             {
+                var fuck = pi.Name;
+
                 // Exclude the document we're on.
-                if (pi == excludeProjectItem)
-                    continue;
+                //if (pi == excludeProjectItem)
+                //    continue;
 
                 // Exclude the project already searched.
                 if (excludeProject != null && pi.ContainingProject != null &&
@@ -682,7 +692,8 @@ namespace MvvmTools.Services
                     if (!searchAllFiles && 
                         !typesToFind.Any(t => pi.Name.IndexOf(t, StringComparison.OrdinalIgnoreCase) >= 0))
                         continue;
-                    
+
+
                     // This takes a VERY long time
                     var classesInProjectItem = GetClassesInProjectItem(pi);
 
@@ -691,13 +702,15 @@ namespace MvvmTools.Services
                     {
                         if (typesToFind.Contains(c.Class, StringComparer.OrdinalIgnoreCase))
                         {
+                            //保存XAML
                             if (!xamlSaved && parentProjectItem != null)
                             {
                                 // Parent is the xaml/axaml file corresponding to this ?xaml.cs or ?xaml.vb.  We save it once.
                                 tmpResults.Add(new ProjectItemAndType(parentProjectItem, c));
                                 xamlSaved = true;
                             }
-
+                            if (pi == excludeProjectItem)
+                                continue;
                             tmpResults.Add(new ProjectItemAndType(pi, c));
                         }
                     }

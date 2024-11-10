@@ -70,7 +70,7 @@ namespace MvvmTools.Services
             IEnumerable<string> typeNamesInFile,
             string[] viewPrefixes,
             string[] viewSuffixes,
-            string viewModelSuffix);
+            string viewModelSuffix, bool searchAll = false);
 
         /// <summary>
         /// Gets the solution as a project model, and all the projects and solution folders.  Project contents are <b>not</b> included.

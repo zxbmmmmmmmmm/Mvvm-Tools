@@ -70,6 +70,8 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adornments\NavigateViewportAdornment.cs" />
+    <Compile Include="Adornments\NavigateViewportAdornmentTextViewCreationListener.cs" />
     <Compile Include="BaseCommand.cs" />
     <Compile Include="Behaviors\FolderDialogBehavior.cs" />
     <Compile Include="Commands\GoToViewOrViewModelCommand.cs" />
@@ -220,6 +222,9 @@
     <Compile Include="Views\StringDialog.xaml.cs">
       <DependentUpon>StringDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SwitchViewModelUserControl.xaml.cs">
+      <DependentUpon>SwitchViewModelUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TemplateBrowseUserControl.xaml.cs">
       <DependentUpon>TemplateBrowseUserControl.xaml</DependentUpon>
     </Compile>
@@ -247,6 +252,10 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -297,6 +306,9 @@
     </PackageReference>
     <PackageReference Include="Unity.Container">
       <Version>5.11.10</Version>
+    </PackageReference>
+    <PackageReference Include="ValueConverters">
+      <Version>3.1.22</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -375,6 +387,10 @@
     <Page Include="Views\StringDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SwitchViewModelUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TemplateBrowseUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
