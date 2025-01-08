@@ -667,9 +667,26 @@ namespace MvvmTools.Services
                     pi.Name.EndsWith(".axaml", StringComparison.OrdinalIgnoreCase))
                 {
                     if (pi.ProjectItems != null)
-                        FindDocumentsContainingTypesRecursive(excludeProjectItem, excludeProject,
-                            pi.ProjectItems.Cast<ProjectItem>(), typesToFind,
-                            searchAllFiles, pi, tmpResults);
+                    {
+                        if (pi.ProjectItems.Cast<ProjectItem>().Any(p => p.Name.EndsWith(".cs")))
+                        {
+                            FindDocumentsContainingTypesRecursive(excludeProjectItem, excludeProject,
+                                pi.ProjectItems.Cast<ProjectItem>(), typesToFind,
+                                searchAllFiles, pi, tmpResults);
+                        }
+                        else if(
+                            typesToFind.Any(t => pi.Name.IndexOf(t, StringComparison.OrdinalIgnoreCase) >= 0))
+                        {
+                            //var classesInProjectItem = GetClassesInProjectItem(pi);
+                            //DICTIONARY
+                            if(tmpResults.All(r => r.ProjectItem.Name != pi.Name))
+                            {
+                                tmpResults.Add(new ProjectItemAndType(pi, null));
+                            }
+
+                        }
+                    }
+
                 }
                 else
                 {
@@ -706,7 +723,7 @@ namespace MvvmTools.Services
                             if (!xamlSaved && parentProjectItem != null)
                             {
                                 // Parent is the xaml/axaml file corresponding to this ?xaml.cs or ?xaml.vb.  We save it once.
-                                tmpResults.Add(new ProjectItemAndType(parentProjectItem, c));
+                                //tmpResults.Add(new ProjectItemAndType(parentProjectItem, c));
                                 xamlSaved = true;
                             }
                             if (pi == excludeProjectItem)

@@ -1,4 +1,5 @@
 ﻿using MvvmTools.Commands;
+using MvvmTools.Extensions;
 using MvvmTools.Models;
 using MvvmTools.Services;
 using MvvmTools.ViewModels;
@@ -64,18 +65,23 @@ public partial class SwitchViewModelUserControl : UserControl
     public static readonly DependencyProperty FileTypeProperty =
         DependencyProperty.Register(nameof(FileType), typeof(FileType), typeof(SwitchViewModelUserControl), new PropertyMetadata(default));
 
-    private void Update()
+    private async Task Update()
     {
         var projectItem = Package.ActiveDocument.ProjectItem;
-        
+        var settings = await SettingsService.LoadSettings();
+        var suffixes = settings.ViewSuffixes;
+
         var isCodeBehind = projectItem.Name.EndsWith(".xaml.cs", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".xaml.vb", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".axaml.cs", StringComparison.OrdinalIgnoreCase) ||
-                           projectItem.Name.EndsWith(".axaml.vb", StringComparison.OrdinalIgnoreCase);
+                           projectItem.Name.EndsWith(".axaml.vb", StringComparison.OrdinalIgnoreCase)||
+                           (projectItem.Name.EndsWith(".cs", StringComparison.OrdinalIgnoreCase)&suffixes.Any(p => projectItem.Name.Contains(p)))
+                           ;
         var isView = projectItem.Name.EndsWith(".xaml", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".xaml", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".axaml", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".axaml", StringComparison.OrdinalIgnoreCase);
+
         if (projectItem.Name.Contains("ViewModel"))
         {
             FileType = FileType.ViewModel;
@@ -135,11 +141,11 @@ public partial class SwitchViewModelUserControl : UserControl
             {
                 var classesInFile = SolutionService.GetClassesInProjectItem(pi);
 
-                if (classesInFile.Count == 0)
-                {
-                    MessageBox.Show("No classes found in file.", "MVVM Tools");
-                    return;
-                }
+                //if (classesInFile.Count == 0)
+                //{
+                //    MessageBox.Show("No classes found in file.", "MVVM Tools");
+                //    return;
+                //}
 
                 var settings = await SettingsService.LoadSettings();
 
@@ -148,6 +154,9 @@ public partial class SwitchViewModelUserControl : UserControl
                     return;
 
                 List<ProjectItemAndType> docs;
+
+                //如果当前项目为字典，classesInFile可能没有内容
+                //这时候直接搜索pi.Name
 
                 if (!settings.GoToViewOrViewModelSearchSolution)
                 {
@@ -185,6 +194,7 @@ public partial class SwitchViewModelUserControl : UserControl
                         settingsPm.ViewModelSuffix);
                 }
                 else
+                {
                     // Passing the first two parameters as null tells GetRelatedDocuments() to
                     // search the entire solution.
                     docs = SolutionService.GetRelatedDocuments(
@@ -196,17 +206,34 @@ public partial class SwitchViewModelUserControl : UserControl
                         settings.ViewSuffixes,
                         settings.SolutionOptions.ViewModelSuffix,
                         true);
+                }
+
+
+
                 //无内容
                 if (docs.Count == 0)
                 {
-                    string classes = "\n        ";
-                    foreach (var c in classesInFile)
-                        classes += c.Class + "\n        ";
+                    //再用当前项目名称搜一遍
+                    docs = SolutionService.GetRelatedDocuments(
+                        null,
+                        null,
+                        pi,
+                        [pi.Name.Replace(".axaml", "").Replace(".xaml", "").Replace(".cs", "")],
+                        new[] { "uc" },
+                        settings.ViewSuffixes,
+                        settings.SolutionOptions.ViewModelSuffix,
+                        true);
+                    if(docs.Count == 0)
+                    {
+                        string classes = "\n        ";
+                        foreach (var c in classesInFile)
+                            classes += c.Class + "\n        ";
 
-                    MessageBox.Show(
-                        $"Couldn't find any matching views or view models.\n\nClasses in this file:\n\n{classes}", "MVVM Tools");
+                        MessageBox.Show(
+                            $"Couldn't find any matching views or view models.\n\nClasses in this file:\n\n{classes}", "MVVM Tools");
 
-                    return;
+                        return;
+                    }
                 }
                 if(fileType is FileType.View)
                 {
@@ -224,10 +251,13 @@ public partial class SwitchViewModelUserControl : UserControl
                 if (fileType is FileType.CodeBehind)
                 {
                     var codeBehindDocs = docs.FindAll(d =>
+                        (d.ProjectItem.Name.EndsWith(".cs", StringComparison.OrdinalIgnoreCase)& classesInFile.Count == 0) ||
+                        d.ProjectItem.Name.EndsWith(".xaml.cs", StringComparison.OrdinalIgnoreCase)||
                         d.ProjectItem.Name.EndsWith(".xaml.cs", StringComparison.OrdinalIgnoreCase) ||
                         d.ProjectItem.Name.EndsWith(".xaml.vb", StringComparison.OrdinalIgnoreCase) ||
                         d.ProjectItem.Name.EndsWith(".axaml.cs", StringComparison.OrdinalIgnoreCase) ||
                         d.ProjectItem.Name.EndsWith(".axaml.vb", StringComparison.OrdinalIgnoreCase));
+                    //var list = docs.Select(p => p.ProjectItem.Name).ToList();
                     if (codeBehindDocs.Count > 1)
                     {
                         PresentViewViewModelOptions(codeBehindDocs);
