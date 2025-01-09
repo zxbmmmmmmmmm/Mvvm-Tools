@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -87,7 +88,9 @@ public partial class SwitchViewModelUserControl : UserControl
                            projectItem.Name.EndsWith(".axaml", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".axaml", StringComparison.OrdinalIgnoreCase);
 
-        if (projectItem.Name.Contains("ViewModel"))
+        var name1 = projectItem.Name.Split('.').First();
+
+        if (name1.EndsWith("ViewModel"))
         {
             FileType = FileType.ViewModel;
         }
@@ -214,16 +217,17 @@ public partial class SwitchViewModelUserControl : UserControl
                 }
 
 
-
+                
                 //无内容
                 if (docs.Count == 0)
                 {
+                    var name1 = pi.Name.Split('.').First();
                     //再用当前项目名称搜一遍
                     docs = SolutionService.GetRelatedDocuments(
                         null,
                         null,
                         pi,
-                        [pi.Name.Replace(".axaml", "").Replace(".xaml", "").Replace(".cs", "")],
+                        [name1],
                         new[] { "uc" },
                         settings.ViewSuffixes,
                         settings.SolutionOptions.ViewModelSuffix,
@@ -240,6 +244,7 @@ public partial class SwitchViewModelUserControl : UserControl
                         return;
                     }
                 }
+                docs = docs.DistinctBy(p => p.ProjectItem.Name).ToList();
                 if(fileType is FileType.View)
                 {
                     var xamlDocs = docs.FindAll(d => d.ProjectItem.Name.EndsWith(".xaml", StringComparison.OrdinalIgnoreCase));
@@ -298,8 +303,23 @@ public partial class SwitchViewModelUserControl : UserControl
         }
 
     }
-}
 
+}
+public static class EnumerableExtensions 
+{
+    public static IEnumerable<TSource> DistinctBy<TSource, TKey>
+        (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+    {
+        HashSet<TKey> seenKeys = new HashSet<TKey>();
+        foreach (TSource element in source)
+        {
+            if (seenKeys.Add(keySelector(element)))
+            {
+                yield return element;
+            }
+        }
+    }
+}
 public enum FileType
 {
     View,

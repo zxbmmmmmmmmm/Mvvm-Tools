@@ -679,10 +679,7 @@ namespace MvvmTools.Services
                         {
                             //var classesInProjectItem = GetClassesInProjectItem(pi);
                             //DICTIONARY
-                            if(tmpResults.All(r => r.ProjectItem.Name != pi.Name))
-                            {
-                                tmpResults.Add(new ProjectItemAndType(pi, null));
-                            }
+                            tmpResults.Add(new ProjectItemAndType(pi, null));
 
                         }
                     }
@@ -723,12 +720,13 @@ namespace MvvmTools.Services
                             if (!xamlSaved && parentProjectItem != null)
                             {
                                 // Parent is the xaml/axaml file corresponding to this ?xaml.cs or ?xaml.vb.  We save it once.
-                                //tmpResults.Add(new ProjectItemAndType(parentProjectItem, c));
+                                tmpResults.Add(new ProjectItemAndType(parentProjectItem, null));
+
                                 xamlSaved = true;
                             }
                             if (pi == excludeProjectItem)
                                 continue;
-                            tmpResults.Add(new ProjectItemAndType(pi, c));
+                            tmpResults.Add(new ProjectItemAndType(pi, null));
                         }
                     }
                 }
