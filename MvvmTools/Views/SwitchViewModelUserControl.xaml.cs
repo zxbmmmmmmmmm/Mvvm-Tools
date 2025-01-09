@@ -69,8 +69,12 @@ public partial class SwitchViewModelUserControl : UserControl
     {
         var projectItem = Package.ActiveDocument.ProjectItem;
         var settings = await SettingsService.LoadSettings();
-        var suffixes = settings.ViewSuffixes;
-
+        var suffixes = settings.ViewSuffixes.Where(p => p != "");
+        if(projectItem is null)
+        {
+            FileType = FileType.Other;
+            return;
+        }
         var isCodeBehind = projectItem.Name.EndsWith(".xaml.cs", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".xaml.vb", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".axaml.cs", StringComparison.OrdinalIgnoreCase) ||
