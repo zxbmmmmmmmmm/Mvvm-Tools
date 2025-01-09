@@ -247,7 +247,9 @@ public partial class SwitchViewModelUserControl : UserControl
                 docs = docs.DistinctBy(p => p.ProjectItem.Name).ToList();
                 if(fileType is FileType.View)
                 {
-                    var xamlDocs = docs.FindAll(d => d.ProjectItem.Name.EndsWith(".xaml", StringComparison.OrdinalIgnoreCase));
+                    var xamlDocs = docs.FindAll(d =>
+                    d.ProjectItem.Name.EndsWith(".xaml", StringComparison.OrdinalIgnoreCase)||
+                    d.ProjectItem.Name.EndsWith(".axaml", StringComparison.OrdinalIgnoreCase));
                     if (xamlDocs.Count > 1)
                     {
                         PresentViewViewModelOptions(xamlDocs);
