@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="MVVMToolsEX.Betta Fish.6c513ed0-71fb-4fb5-baef-8430d197c9ef" Version="0.6.0.4" Language="en-US" Publisher="Betta_Fish" />
+        <Identity Id="MVVMToolsEX.Betta Fish.6c513ed0-71fb-4fb5-baef-8430d197c9ef" Version="0.6.0.5" Language="en-US" Publisher="Betta_Fish" />
         <DisplayName>MVVM Tools EX</DisplayName>
         <Description xml:space="preserve">Switch between View and ViewModel with Ctrl+E,Q.
 Added Viewport Adornments.</Description>
