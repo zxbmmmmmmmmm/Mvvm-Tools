@@ -75,11 +75,12 @@ public partial class SwitchViewModelUserControl : UserControl
             FileType = FileType.Other;
             return;
         }
+        
         var isCodeBehind = projectItem.Name.EndsWith(".xaml.cs", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".xaml.vb", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".axaml.cs", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".axaml.vb", StringComparison.OrdinalIgnoreCase)||
-                           (projectItem.Name.EndsWith(".cs", StringComparison.OrdinalIgnoreCase)&suffixes.Any(p => projectItem.Name.Contains(p)))
+                           (projectItem.Name.EndsWith(".cs", StringComparison.OrdinalIgnoreCase)&suffixes.Any(p => projectItem.Name.Replace(".cs","").EndsWith(p)))
                            ;
         var isView = projectItem.Name.EndsWith(".xaml", StringComparison.OrdinalIgnoreCase) ||
                            projectItem.Name.EndsWith(".xaml", StringComparison.OrdinalIgnoreCase) ||

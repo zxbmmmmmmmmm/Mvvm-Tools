@@ -61,7 +61,7 @@ namespace MvvmTools.Services
 
         static SettingsService()
         {
-            DefaultViewSuffixes = new [] { "", "View", "Flyout", "UserControl", "Page", "Window", "Dialog" };
+            DefaultViewSuffixes = new [] { "", "View", "Flyout", "Control", "Page", "Window", "Dialog"  };
             
             SolutionDefaultProjectOptions = new ProjectOptions
             {
