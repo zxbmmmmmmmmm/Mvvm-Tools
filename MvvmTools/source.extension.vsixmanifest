@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="MvvmTools.Chris Bordeman.14a68ffd-3571-40a1-a56b-cf35813ba33c" Version="0.6.0.4" Language="en-US" Publisher="Betta_Fish" />
-        <DisplayName>MVVM Tools</DisplayName>
-        <Description xml:space="preserve">Switch between View and ViewModel with Ctrl+E,Q.</Description>
+        <Identity Id="MVVMToolsEX.Betta Fish.6c513ed0-71fb-4fb5-baef-8430d197c9ef" Version="0.6.0.4" Language="en-US" Publisher="Betta_Fish" />
+        <DisplayName>MVVM Tools EX</DisplayName>
+        <Description xml:space="preserve">Switch between View and ViewModel with Ctrl+E,Q.
+Added Viewport Adornments.</Description>
         <MoreInfo>https://github.com/zxbmmmmmmmmm/Mvvm-Tools</MoreInfo>
         <License>License.txt</License>
+        <Preview>true</Preview>
     </Metadata>
     <Installation>
         <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
