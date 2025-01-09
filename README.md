@@ -7,6 +7,7 @@ Added a ViewportAdornment to make switching easier.
 MVVM Tools is NOT an MVVM library.  It works with any MVVM implementation.
 
 Copyright 2025 Betta_Fish
+
 Copyright 2023 Chris Bordeman cbordeman@outlook.com
 
 LICENSE
