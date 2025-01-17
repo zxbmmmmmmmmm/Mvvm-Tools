@@ -267,6 +267,9 @@
     <PackageReference Include="CommonServiceLocator">
       <Version>2.0.7</Version>
     </PackageReference>
+    <PackageReference Include="Community.VisualStudio.Toolkit.17">
+      <Version>17.0.527</Version>
+    </PackageReference>
     <PackageReference Include="Expression.Interaction">
       <Version>3.0.40218</Version>
     </PackageReference>

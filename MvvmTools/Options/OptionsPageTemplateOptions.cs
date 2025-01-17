@@ -18,6 +18,7 @@ namespace MvvmTools.Options
     // persistence through the Visual Studio settings mechanism.
     /// </summary>
     [Guid(Constants.GuidOptionsPageTemplateOptions)]
+    [ComVisible(true)]
     internal class OptionsPageTemplateOptions : UIElementDialogPage
     {
         #region Fields

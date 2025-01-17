@@ -11,6 +11,7 @@ using Unity;
 namespace MvvmTools.Options
 {
     [Guid(Constants.GuidOptionsPageTemplateMaintenance)]
+    [ComVisible(true)]
     internal class OptionsPageTemplateMaintenance : UIElementDialogPage
     {
         #region Fields

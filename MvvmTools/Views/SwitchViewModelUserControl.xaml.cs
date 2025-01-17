@@ -21,7 +21,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Community.VisualStudio.Toolkit;
 using Unity;
+using MessageBox = System.Windows.MessageBox;
 
 namespace MvvmTools.Views;
 
@@ -133,9 +135,8 @@ public partial class SwitchViewModelUserControl : UserControl
         if (result.GetValueOrDefault())
         {
             // Go to the selected project item.
-            var win = vm.SelectedDocument.ProjectItem.Open();
-            win.Visible = true;
-            win.Activate();
+            VS.Documents.OpenInPreviewTabAsync(vm.SelectedDocument.ProjectItem.FileNames[1]);
+
         }
     }
 
@@ -256,9 +257,8 @@ public partial class SwitchViewModelUserControl : UserControl
                         return;
                     }
                     if (xamlDocs.Count == 0) return;
-                    var win = xamlDocs[0].ProjectItem.Open();
-                    win.Visible = true;
-                    win.Activate();
+                    VS.Documents.OpenInPreviewTabAsync(xamlDocs[0].ProjectItem.FileNames[1]);
+
                 }
                 if (fileType is FileType.CodeBehind)
                 {
@@ -277,9 +277,8 @@ public partial class SwitchViewModelUserControl : UserControl
                     }
                     if (codeBehindDocs.Count == 0) return;
 
-                    var win = codeBehindDocs[0].ProjectItem.Open();
-                    win.Visible = true;
-                    win.Activate();
+                    VS.Documents.OpenInPreviewTabAsync(codeBehindDocs[0].ProjectItem.FileNames[1]);
+
                 }
                 if (fileType is FileType.ViewModel)
                 {
@@ -292,9 +291,7 @@ public partial class SwitchViewModelUserControl : UserControl
                     }
                     if (viewModel.Count == 0) return;
 
-                    var win = viewModel[0].ProjectItem.Open();
-                    win.Visible = true;
-                    win.Activate();
+                    VS.Documents.OpenInPreviewTabAsync(viewModel[0].ProjectItem.FileNames[1]);
                 }
             }
         }

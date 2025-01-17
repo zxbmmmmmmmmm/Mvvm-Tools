@@ -12,6 +12,7 @@ namespace MvvmTools.Options
     // Note: The Visual Studio designer for this file (WinForms) won't work.
 
     [Guid(Constants.GuidOptionsPageSolutionAndProjects)]
+    [ComVisible(true)]
     internal class OptionsPageSolutionAndProjects : UIElementDialogPage
     {
         #region Fields

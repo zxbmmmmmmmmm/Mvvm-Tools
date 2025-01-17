@@ -2,6 +2,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.Integration;
@@ -44,6 +45,7 @@ namespace MvvmTools.Controls
     /// tabbing into and out of the WPF child HWND, and enables keyboard navigation
     /// within the WPF child HWND.
     /// </summary>
+    [ComVisible(true)]
     public abstract class UIElementDialogPage : DialogPage
     {
         /// <summary>

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Community.VisualStudio.Toolkit;
 using MvvmTools.Models;
 using MvvmTools.Services;
 using MvvmTools.ViewModels;
@@ -45,7 +46,7 @@ namespace MvvmTools.Commands
 
                     if (classesInFile.Count == 0)
                     {
-                        MessageBox.Show("No classes found in file.", "MVVM Tools");
+                        System.Windows.MessageBox.Show("No classes found in file.", "MVVM Tools");
                         return;
                     }
 
@@ -110,7 +111,7 @@ namespace MvvmTools.Commands
                         foreach (var c in classesInFile)
                             classes += c.Class + "\n        ";
 
-                        MessageBox.Show(
+                        System.Windows.MessageBox.Show(
                             $"Couldn't find any matching views or view models.\n\nClasses in this file:\n\n{classes}", "MVVM Tools");
 
                         return;
@@ -118,9 +119,7 @@ namespace MvvmTools.Commands
 
                     if (docs.Count == 1 || settings.GoToViewOrViewModelOption == GoToViewOrViewModelOption.ChooseFirst)
                     {
-                        var win = docs[0].ProjectItem.Open();
-                        win.Visible = true;
-                        win.Activate();
+                        await VS.Documents.OpenInPreviewTabAsync(docs[0].ProjectItem.FileNames[1]);
 
                         return;
                     }
@@ -168,15 +167,13 @@ namespace MvvmTools.Commands
                         if (settings.GoToViewOrViewModelOption == GoToViewOrViewModelOption.ChooseCodeBehind)
                         {
                             //await (new JoinableTaskFactory(null)).SwitchToMainThreadAsync();
-                            var win = docs[0].ProjectItem.Open();
-                            win.Visible = true;
-                            win.Activate();
+                            await VS.Documents.OpenInPreviewTabAsync(docs[0].ProjectItem.FileNames[1]);
+
                         }
                         else
                         {
-                            var win = docs[1].ProjectItem.Open();
-                            win.Visible = true;
-                            win.Activate();
+                            await VS.Documents.OpenInPreviewTabAsync(docs[1].ProjectItem.FileNames[1]);
+
                         }
                     }
                     else if (string.Compare(docs[1].ProjectItem.Name, docs[0].ProjectItem.Name + ".cs", StringComparison.OrdinalIgnoreCase) == 0 ||
@@ -185,15 +182,11 @@ namespace MvvmTools.Commands
                         // First file is XAML/AXAML, second is code behind.
                         if (settings.GoToViewOrViewModelOption == GoToViewOrViewModelOption.ChooseXaml)
                         {
-                            var win = docs[0].ProjectItem.Open();
-                            win.Visible = true;
-                            win.Activate();
+                            await VS.Documents.OpenInPreviewTabAsync(docs[0].ProjectItem.FileNames[1]);
                         }
                         else
                         {
-                            var win = docs[1].ProjectItem.Open();
-                            win.Visible = true;
-                            win.Activate();
+                            await VS.Documents.OpenInPreviewTabAsync(docs[1].ProjectItem.FileNames[1]);
                         }
                     }
                     else
